@@ -1,0 +1,104 @@
+Enabling profiling...
++ srun -u shifter -V /pscratch/sd/s/shas1693/data/sc24_tutorial_data:/data -V /pscratch/sd/t/train720/sc24-dl-tutorial/logs:/logs bash -c '
+    source export_DDP_vars.sh
+    nsys profile --trace=cuda,cublas,nvtx --kill none -c cudaProfilerApi -f true -o /pscratch/sd/t/train720/sc24-dl-tutorial/logs/AMPFP16 python train.py --config=short --num_data_workers 8 --data_loader_config=dali --amp_mode=fp16
+    '
+2024-11-18 16:50:21,054 - root - INFO - ------------------ Configuration ------------------
+2024-11-18 16:50:21,055 - root - INFO - Configuration file: /global/u2/t/train720/sc24-dl-tutorial/config/ViT.yaml
+2024-11-18 16:50:21,055 - root - INFO - Configuration name: short
+2024-11-18 16:50:21,055 - root - INFO - limit_nsamples 512
+2024-11-18 16:50:21,055 - root - INFO - limit_nsamples_val 128
+2024-11-18 16:50:21,055 - root - INFO - num_iters 128
+2024-11-18 16:50:21,055 - root - INFO - embed_dim 384
+2024-11-18 16:50:21,055 - root - INFO - depth 12
+2024-11-18 16:50:21,055 - root - INFO - dropout 0.0
+2024-11-18 16:50:21,055 - root - INFO - patch_size 8
+2024-11-18 16:50:21,055 - root - INFO - num_heads 8
+2024-11-18 16:50:21,055 - root - INFO - img_size [360, 720]
+2024-11-18 16:50:21,055 - root - INFO - dt 1
+2024-11-18 16:50:21,056 - root - INFO - global_batch_size 16
+2024-11-18 16:50:21,056 - root - INFO - amp_mode fp16
+2024-11-18 16:50:21,056 - root - INFO - enable_fused False
+2024-11-18 16:50:21,056 - root - INFO - enable_jit False
+2024-11-18 16:50:21,056 - root - INFO - expdir /logs
+2024-11-18 16:50:21,056 - root - INFO - lr_schedule cosine
+2024-11-18 16:50:21,056 - root - INFO - lr 0.0005
+2024-11-18 16:50:21,056 - root - INFO - warmup 0
+2024-11-18 16:50:21,056 - root - INFO - optimizer Adam
+2024-11-18 16:50:21,056 - root - INFO - data_loader_config dali
+2024-11-18 16:50:21,056 - root - INFO - num_data_workers 8
+2024-11-18 16:50:21,056 - root - INFO - n_in_channels 20
+2024-11-18 16:50:21,056 - root - INFO - n_out_channels 20
+2024-11-18 16:50:21,056 - root - INFO - train_data_path /data/train
+2024-11-18 16:50:21,056 - root - INFO - valid_data_path /data/valid
+2024-11-18 16:50:21,056 - root - INFO - inf_data_path /data/test
+2024-11-18 16:50:21,056 - root - INFO - time_means_path /data/stats/time_means.npy
+2024-11-18 16:50:21,056 - root - INFO - global_means_path /data/stats/global_means.npy
+2024-11-18 16:50:21,056 - root - INFO - global_stds_path /data/stats/global_stds.npy
+2024-11-18 16:50:21,057 - root - INFO - wireup_info env
+2024-11-18 16:50:21,057 - root - INFO - wireup_store tcp
+2024-11-18 16:50:21,057 - root - INFO - amp_enabled True
+2024-11-18 16:50:21,057 - root - INFO - amp_dtype torch.float16
+2024-11-18 16:50:21,057 - root - INFO - ---------------------------------------------------
+2024-11-18 16:50:21,239 - root - INFO - rank 0, begin data loader init
+2024-11-18 16:50:21,891 - root - INFO - Getting file stats from /data/train/1990.h5
+2024-11-18 16:50:21,892 - root - INFO - Overriding total number of samples to: 512
+2024-11-18 16:50:21,892 - root - INFO - Number of samples per year: 1460
+2024-11-18 16:50:21,892 - root - INFO - Found data at path /data/train. Number of examples: 512. Image Shape: 360 x 720 x 20
+2024-11-18 16:50:22,217 - root - INFO - Getting file stats from /data/train/1990.h5
+2024-11-18 16:50:22,218 - root - INFO - Overriding total number of samples to: 512
+2024-11-18 16:50:40,780 - root - INFO - Getting file stats from /data/valid/2016.h5
+2024-11-18 16:50:40,781 - root - INFO - Overriding total number of samples to: 128
+2024-11-18 16:50:40,781 - root - INFO - Number of samples per year: 1460
+2024-11-18 16:50:40,781 - root - INFO - Found data at path /data/valid. Number of examples: 128. Image Shape: 360 x 720 x 20
+2024-11-18 16:50:40,915 - root - INFO - Getting file stats from /data/valid/2016.h5
+2024-11-18 16:50:40,918 - root - INFO - Overriding total number of samples to: 128
+2024-11-18 16:50:58,799 - root - INFO - rank 0, data loader initialized
+2024-11-18 16:50:59,885 - root - INFO - VisionTransformer(
+  (patch_embed): PatchEmbed(
+    (proj): Conv2d(20, 384, kernel_size=(8, 8), stride=(8, 8))
+  )
+  (pos_drop): Dropout(p=0.0, inplace=False)
+  (blocks): ModuleList(
+    (0-11): 12 x Block(
+      (drop_path): Identity()
+      (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+      (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+      (attn): Attention(
+        (q): Linear(in_features=384, out_features=384, bias=True)
+        (k): Linear(in_features=384, out_features=384, bias=True)
+        (v): Linear(in_features=384, out_features=384, bias=True)
+        (attn_drop): Dropout(p=0.0, inplace=False)
+        (proj): Linear(in_features=384, out_features=384, bias=True)
+        (proj_drop): Dropout(p=0.0, inplace=False)
+      )
+      (mlp): MLP(
+        (fc1): Linear(in_features=384, out_features=1536, bias=True)
+        (act): GELU(approximate='none')
+        (fc2): Linear(in_features=1536, out_features=384, bias=True)
+        (drop): Dropout(p=0.0, inplace=False)
+      )
+    )
+  )
+  (norm): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+  (head): Linear(in_features=384, out_features=1280, bias=False)
+)
+2024-11-18 16:50:59,886 - root - INFO - Starting Training Loop...
+2024-11-18 16:51:10,621 - root - INFO - Time taken for epoch 1 is 9.736757 sec, avg 50.940988 samples/sec
+2024-11-18 16:51:10,621 - root - INFO -   Avg train loss=0.584007
+2024-11-18 16:51:12,297 - root - INFO -   Avg val loss=0.4224698841571808
+2024-11-18 16:51:12,297 - root - INFO -   Total validation time: 1.0809025764465332 sec
+2024-11-18 16:51:21,866 - root - INFO - Time taken for epoch 2 is 9.563254 sec, avg 53.538264 samples/sec
+2024-11-18 16:51:21,867 - root - INFO -   Avg train loss=0.391675
+2024-11-18 16:51:23,543 - root - INFO -   Avg val loss=0.3750535845756531
+2024-11-18 16:51:23,544 - root - INFO -   Total validation time: 1.1885161399841309 sec
+2024-11-18 16:51:33,124 - root - INFO - Time taken for epoch 3 is 9.573331 sec, avg 53.481907 samples/sec
+2024-11-18 16:51:33,124 - root - INFO -   Avg train loss=0.356291
+2024-11-18 16:51:34,775 - root - INFO -   Avg val loss=0.3536645174026489
+2024-11-18 16:51:34,776 - root - INFO -   Total validation time: 1.16786789894104 sec
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/tmp/nsys-report-2eba.qdstrm'
+[1/1] [0%                          ] AMPFP16.nsys-rep[1/1] [0%                          ] AMPFP16.nsys-rep[1/1] [5%                          ] AMPFP16.nsys-rep[1/1] [=15%                        ] AMPFP16.nsys-rep[1/1] [====25%                     ] AMPFP16.nsys-rep[1/1] [=======37%                  ] AMPFP16.nsys-rep[1/1] [==========48%               ] AMPFP16.nsys-rep[1/1] [=============59%            ] AMPFP16.nsys-rep[1/1] [================71%         ] AMPFP16.nsys-rep[1/1] [=================72%        ] AMPFP16.nsys-rep[1/1] [=================74%        ] AMPFP16.nsys-rep[1/1] [==================76%       ] AMPFP16.nsys-rep[1/1] [==================78%       ] AMPFP16.nsys-rep[1/1] [===================80%      ] AMPFP16.nsys-rep[1/1] [===================82%      ] AMPFP16.nsys-rep[1/1] [========================100%] AMPFP16.nsys-rep[1/1] [========================100%] AMPFP16.nsys-rep
+Generated:
+    /pscratch/sd/t/train720/sc24-dl-tutorial/logs/AMPFP16.nsys-rep
