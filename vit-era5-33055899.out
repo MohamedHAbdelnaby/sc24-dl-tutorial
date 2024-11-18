@@ -1,0 +1,104 @@
+Enabling profiling...
++ srun -u shifter -V /pscratch/sd/s/shas1693/data/sc24_tutorial_data:/data -V /pscratch/sd/t/train720/sc24-dl-tutorial/logs:/logs bash -c '
+    source export_DDP_vars.sh
+    nsys profile --trace=cuda,cublas,nvtx --kill none -c cudaProfilerApi -f true -o /pscratch/sd/t/train720/sc24-dl-tutorial/logs/DaliDataLoader python train.py --config=short --num_data_workers 8 --data_loader_config=dali
+    '
+2024-11-18 16:42:38,361 - root - INFO - ------------------ Configuration ------------------
+2024-11-18 16:42:38,362 - root - INFO - Configuration file: /global/u2/t/train720/sc24-dl-tutorial/config/ViT.yaml
+2024-11-18 16:42:38,362 - root - INFO - Configuration name: short
+2024-11-18 16:42:38,362 - root - INFO - limit_nsamples 512
+2024-11-18 16:42:38,362 - root - INFO - limit_nsamples_val 128
+2024-11-18 16:42:38,362 - root - INFO - num_iters 128
+2024-11-18 16:42:38,362 - root - INFO - embed_dim 384
+2024-11-18 16:42:38,363 - root - INFO - depth 12
+2024-11-18 16:42:38,363 - root - INFO - dropout 0.0
+2024-11-18 16:42:38,363 - root - INFO - patch_size 8
+2024-11-18 16:42:38,363 - root - INFO - num_heads 8
+2024-11-18 16:42:38,363 - root - INFO - img_size [360, 720]
+2024-11-18 16:42:38,363 - root - INFO - dt 1
+2024-11-18 16:42:38,363 - root - INFO - global_batch_size 16
+2024-11-18 16:42:38,363 - root - INFO - amp_mode none
+2024-11-18 16:42:38,363 - root - INFO - enable_fused False
+2024-11-18 16:42:38,363 - root - INFO - enable_jit False
+2024-11-18 16:42:38,363 - root - INFO - expdir /logs
+2024-11-18 16:42:38,363 - root - INFO - lr_schedule cosine
+2024-11-18 16:42:38,363 - root - INFO - lr 0.0005
+2024-11-18 16:42:38,363 - root - INFO - warmup 0
+2024-11-18 16:42:38,364 - root - INFO - optimizer Adam
+2024-11-18 16:42:38,364 - root - INFO - data_loader_config dali
+2024-11-18 16:42:38,364 - root - INFO - num_data_workers 8
+2024-11-18 16:42:38,364 - root - INFO - n_in_channels 20
+2024-11-18 16:42:38,364 - root - INFO - n_out_channels 20
+2024-11-18 16:42:38,364 - root - INFO - train_data_path /data/train
+2024-11-18 16:42:38,364 - root - INFO - valid_data_path /data/valid
+2024-11-18 16:42:38,364 - root - INFO - inf_data_path /data/test
+2024-11-18 16:42:38,364 - root - INFO - time_means_path /data/stats/time_means.npy
+2024-11-18 16:42:38,364 - root - INFO - global_means_path /data/stats/global_means.npy
+2024-11-18 16:42:38,364 - root - INFO - global_stds_path /data/stats/global_stds.npy
+2024-11-18 16:42:38,364 - root - INFO - wireup_info env
+2024-11-18 16:42:38,364 - root - INFO - wireup_store tcp
+2024-11-18 16:42:38,364 - root - INFO - amp_enabled False
+2024-11-18 16:42:38,364 - root - INFO - amp_dtype torch.float32
+2024-11-18 16:42:38,365 - root - INFO - ---------------------------------------------------
+2024-11-18 16:42:38,531 - root - INFO - rank 0, begin data loader init
+2024-11-18 16:42:39,184 - root - INFO - Getting file stats from /data/train/1990.h5
+2024-11-18 16:42:39,184 - root - INFO - Overriding total number of samples to: 512
+2024-11-18 16:42:39,184 - root - INFO - Number of samples per year: 1460
+2024-11-18 16:42:39,184 - root - INFO - Found data at path /data/train. Number of examples: 512. Image Shape: 360 x 720 x 20
+2024-11-18 16:42:39,454 - root - INFO - Getting file stats from /data/train/1990.h5
+2024-11-18 16:42:39,455 - root - INFO - Overriding total number of samples to: 512
+2024-11-18 16:42:57,417 - root - INFO - Getting file stats from /data/valid/2016.h5
+2024-11-18 16:42:57,424 - root - INFO - Overriding total number of samples to: 128
+2024-11-18 16:42:57,426 - root - INFO - Number of samples per year: 1460
+2024-11-18 16:42:57,427 - root - INFO - Found data at path /data/valid. Number of examples: 128. Image Shape: 360 x 720 x 20
+2024-11-18 16:42:57,603 - root - INFO - Getting file stats from /data/valid/2016.h5
+2024-11-18 16:42:57,604 - root - INFO - Overriding total number of samples to: 128
+2024-11-18 16:43:15,491 - root - INFO - rank 0, data loader initialized
+2024-11-18 16:43:16,627 - root - INFO - VisionTransformer(
+  (patch_embed): PatchEmbed(
+    (proj): Conv2d(20, 384, kernel_size=(8, 8), stride=(8, 8))
+  )
+  (pos_drop): Dropout(p=0.0, inplace=False)
+  (blocks): ModuleList(
+    (0-11): 12 x Block(
+      (drop_path): Identity()
+      (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+      (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+      (attn): Attention(
+        (q): Linear(in_features=384, out_features=384, bias=True)
+        (k): Linear(in_features=384, out_features=384, bias=True)
+        (v): Linear(in_features=384, out_features=384, bias=True)
+        (attn_drop): Dropout(p=0.0, inplace=False)
+        (proj): Linear(in_features=384, out_features=384, bias=True)
+        (proj_drop): Dropout(p=0.0, inplace=False)
+      )
+      (mlp): MLP(
+        (fc1): Linear(in_features=384, out_features=1536, bias=True)
+        (act): GELU(approximate='none')
+        (fc2): Linear(in_features=1536, out_features=384, bias=True)
+        (drop): Dropout(p=0.0, inplace=False)
+      )
+    )
+  )
+  (norm): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+  (head): Linear(in_features=384, out_features=1280, bias=False)
+)
+2024-11-18 16:43:16,628 - root - INFO - Starting Training Loop...
+2024-11-18 16:43:55,921 - root - INFO - Time taken for epoch 1 is 38.316739 sec, avg 12.944734 samples/sec
+2024-11-18 16:43:55,922 - root - INFO -   Avg train loss=0.604404
+2024-11-18 16:43:59,208 - root - INFO -   Avg val loss=0.44140395522117615
+2024-11-18 16:43:59,209 - root - INFO -   Total validation time: 2.2385993003845215 sec
+2024-11-18 16:44:38,620 - root - INFO - Time taken for epoch 2 is 39.407948 sec, avg 12.992303 samples/sec
+2024-11-18 16:44:38,621 - root - INFO -   Avg train loss=0.404243
+2024-11-18 16:44:42,119 - root - INFO -   Avg val loss=0.38615110516548157
+2024-11-18 16:44:42,119 - root - INFO -   Total validation time: 2.5411934852600098 sec
+2024-11-18 16:45:21,532 - root - INFO - Time taken for epoch 3 is 39.408006 sec, avg 12.992284 samples/sec
+2024-11-18 16:45:21,533 - root - INFO -   Avg train loss=0.366419
+2024-11-18 16:45:24,997 - root - INFO -   Avg val loss=0.3620228171348572
+2024-11-18 16:45:24,998 - root - INFO -   Total validation time: 2.5185842514038086 sec
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/tmp/nsys-report-2b01.qdstrm'
+[1/1] [0%                          ] DaliDataLoader.nsys-rep[1/1] [0%                          ] DaliDataLoader.nsys-rep[1/1] [5%                          ] DaliDataLoader.nsys-rep[1/1] [6%                          ] DaliDataLoader.nsys-rep[1/1] [==19%                       ] DaliDataLoader.nsys-rep[1/1] [====28%                     ] DaliDataLoader.nsys-rep[1/1] [=======37%                  ] DaliDataLoader.nsys-rep[1/1] [==========47%               ] DaliDataLoader.nsys-rep[1/1] [============57%             ] DaliDataLoader.nsys-rep[1/1] [===============66%          ] DaliDataLoader.nsys-rep[1/1] [===============67%          ] DaliDataLoader.nsys-rep[1/1] [================69%         ] DaliDataLoader.nsys-rep[1/1] [================70%         ] DaliDataLoader.nsys-rep[1/1] [=================72%        ] DaliDataLoader.nsys-rep[1/1] [=================74%        ] DaliDataLoader.nsys-rep[1/1] [==================76%       ] DaliDataLoader.nsys-rep[1/1] [==================77%       ] DaliDataLoader.nsys-rep[1/1] [===================79%      ] DaliDataLoader.nsys-rep[1/1] [===================81%      ] DaliDataLoader.nsys-rep[1/1] [====================83%     ] DaliDataLoader.nsys-rep[1/1] [====================84%     ] DaliDataLoader.nsys-rep[1/1] [=====================86%    ] DaliDataLoader.nsys-rep[1/1] [=====================88%    ] DaliDataLoader.nsys-rep[1/1] [=====================89%    ] DaliDataLoader.nsys-rep[1/1] [========================100%] DaliDataLoader.nsys-rep[1/1] [========================100%] DaliDataLoader.nsys-rep
+Generated:
+    /pscratch/sd/t/train720/sc24-dl-tutorial/logs/DaliDataLoader.nsys-rep
