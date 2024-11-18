@@ -1,0 +1,99 @@
++ srun -u shifter -V /pscratch/sd/s/shas1693/data/sc24_tutorial_data:/data -V /pscratch/sd/t/train720/sc24-dl-tutorial/logs:/logs bash -c '
+    source export_DDP_vars.sh
+     python train.py --config=short
+    '
+2024-11-18 14:37:55,788 - matplotlib.font_manager - INFO - generated new fontManager
+2024-11-18 14:37:56,241 - root - INFO - ------------------ Configuration ------------------
+2024-11-18 14:37:56,242 - root - INFO - Configuration file: /global/u2/t/train720/sc24-dl-tutorial/config/ViT.yaml
+2024-11-18 14:37:56,242 - root - INFO - Configuration name: short
+2024-11-18 14:37:56,242 - root - INFO - limit_nsamples 512
+2024-11-18 14:37:56,242 - root - INFO - limit_nsamples_val 128
+2024-11-18 14:37:56,242 - root - INFO - num_iters 128
+2024-11-18 14:37:56,242 - root - INFO - embed_dim 384
+2024-11-18 14:37:56,242 - root - INFO - depth 12
+2024-11-18 14:37:56,242 - root - INFO - dropout 0.0
+2024-11-18 14:37:56,242 - root - INFO - patch_size 8
+2024-11-18 14:37:56,242 - root - INFO - num_heads 8
+2024-11-18 14:37:56,242 - root - INFO - img_size [360, 720]
+2024-11-18 14:37:56,242 - root - INFO - dt 1
+2024-11-18 14:37:56,243 - root - INFO - global_batch_size 16
+2024-11-18 14:37:56,243 - root - INFO - amp_mode none
+2024-11-18 14:37:56,243 - root - INFO - enable_fused False
+2024-11-18 14:37:56,243 - root - INFO - enable_jit False
+2024-11-18 14:37:56,243 - root - INFO - expdir /logs
+2024-11-18 14:37:56,243 - root - INFO - lr_schedule cosine
+2024-11-18 14:37:56,243 - root - INFO - lr 0.0005
+2024-11-18 14:37:56,243 - root - INFO - warmup 0
+2024-11-18 14:37:56,243 - root - INFO - optimizer Adam
+2024-11-18 14:37:56,243 - root - INFO - data_loader_config pytorch
+2024-11-18 14:37:56,243 - root - INFO - num_data_workers 0
+2024-11-18 14:37:56,243 - root - INFO - n_in_channels 20
+2024-11-18 14:37:56,243 - root - INFO - n_out_channels 20
+2024-11-18 14:37:56,243 - root - INFO - train_data_path /data/train
+2024-11-18 14:37:56,244 - root - INFO - valid_data_path /data/valid
+2024-11-18 14:37:56,244 - root - INFO - inf_data_path /data/test
+2024-11-18 14:37:56,244 - root - INFO - time_means_path /data/stats/time_means.npy
+2024-11-18 14:37:56,244 - root - INFO - global_means_path /data/stats/global_means.npy
+2024-11-18 14:37:56,244 - root - INFO - global_stds_path /data/stats/global_stds.npy
+2024-11-18 14:37:56,244 - root - INFO - wireup_info env
+2024-11-18 14:37:56,244 - root - INFO - wireup_store tcp
+2024-11-18 14:37:56,244 - root - INFO - amp_enabled False
+2024-11-18 14:37:56,244 - root - INFO - amp_dtype torch.float32
+2024-11-18 14:37:56,244 - root - INFO - ---------------------------------------------------
+2024-11-18 14:37:56,596 - root - INFO - rank 0, begin data loader init
+2024-11-18 14:37:57,138 - root - INFO - Getting file stats from /data/train/1990.h5
+2024-11-18 14:37:57,139 - root - INFO - Overriding total number of samples to: 512
+2024-11-18 14:37:57,139 - root - INFO - Number of samples per year: 1460
+2024-11-18 14:37:57,139 - root - INFO - Found data at path /data/train. Number of examples: 512. Image Shape: 360 x 720 x 20
+2024-11-18 14:37:57,142 - root - INFO - Getting file stats from /data/valid/2016.h5
+2024-11-18 14:37:57,142 - root - INFO - Overriding total number of samples to: 128
+2024-11-18 14:37:57,142 - root - INFO - Number of samples per year: 1460
+2024-11-18 14:37:57,142 - root - INFO - Found data at path /data/valid. Number of examples: 128. Image Shape: 360 x 720 x 20
+2024-11-18 14:37:57,142 - root - INFO - rank 0, data loader initialized
+2024-11-18 14:38:02,364 - root - INFO - VisionTransformer(
+  (patch_embed): PatchEmbed(
+    (proj): Conv2d(20, 384, kernel_size=(8, 8), stride=(8, 8))
+  )
+  (pos_drop): Dropout(p=0.0, inplace=False)
+  (blocks): ModuleList(
+    (0-11): 12 x Block(
+      (drop_path): Identity()
+      (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+      (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+      (attn): Attention(
+        (q): Linear(in_features=384, out_features=384, bias=True)
+        (k): Linear(in_features=384, out_features=384, bias=True)
+        (v): Linear(in_features=384, out_features=384, bias=True)
+        (attn_drop): Dropout(p=0.0, inplace=False)
+        (proj): Linear(in_features=384, out_features=384, bias=True)
+        (proj_drop): Dropout(p=0.0, inplace=False)
+      )
+      (mlp): MLP(
+        (fc1): Linear(in_features=384, out_features=1536, bias=True)
+        (act): GELU(approximate='none')
+        (fc2): Linear(in_features=1536, out_features=384, bias=True)
+        (drop): Dropout(p=0.0, inplace=False)
+      )
+    )
+  )
+  (norm): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+  (head): Linear(in_features=384, out_features=1280, bias=False)
+)
+2024-11-18 14:38:02,365 - root - INFO - Starting Training Loop...
+2024-11-18 14:39:13,603 - root - INFO - Time taken for epoch 1 is 62.680374 sec, avg 8.168426 samples/sec
+2024-11-18 14:39:13,604 - root - INFO -   Avg train loss=0.581509
+2024-11-18 14:39:19,362 - root - INFO -   Avg val loss=0.4273034334182739
+2024-11-18 14:39:19,362 - root - INFO -   Total validation time: 5.09274435043335 sec
+2024-11-18 14:40:13,860 - root - INFO - Time taken for epoch 2 is 54.493183 sec, avg 9.395671 samples/sec
+2024-11-18 14:40:13,860 - root - INFO -   Avg train loss=0.393563
+2024-11-18 14:40:18,808 - root - INFO -   Avg val loss=0.377616286277771
+2024-11-18 14:40:18,809 - root - INFO -   Total validation time: 4.260003566741943 sec
+2024-11-18 14:41:16,242 - root - INFO - Time taken for epoch 3 is 57.429842 sec, avg 8.915226 samples/sec
+2024-11-18 14:41:16,242 - root - INFO -   Avg train loss=0.358383
+2024-11-18 14:41:22,054 - root - INFO -   Avg val loss=0.35547393560409546
+2024-11-18 14:41:22,054 - root - INFO -   Total validation time: 5.120373725891113 sec
+2024-11-18 14:42:19,376 - root - INFO - Time taken for epoch 4 is 57.318671 sec, avg 8.932517 samples/sec
+2024-11-18 14:42:19,377 - root - INFO -   Avg train loss=0.346203
+2024-11-18 14:42:25,192 - root - INFO -   Avg val loss=0.35158348083496094
+2024-11-18 14:42:25,192 - root - INFO -   Total validation time: 5.105379104614258 sec
+2024-11-18 14:42:25,197 - root - INFO - DONE ---- rank 0
