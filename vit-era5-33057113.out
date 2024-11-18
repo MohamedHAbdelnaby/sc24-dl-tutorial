@@ -1,0 +1,120 @@
+Enabling profiling...
++ srun -u shifter -V /pscratch/sd/s/shas1693/data/sc24_tutorial_data:/data -V /pscratch/sd/t/train720/sc24-dl-tutorial/logs:/logs bash -c '
+    source export_DDP_vars.sh
+    nsys profile --trace=cuda,cublas,nvtx --kill none -c cudaProfilerApi -f true -o /pscratch/sd/t/train720/sc24-dl-tutorial/logs/JITCompilation python train.py --config=short --num_data_workers 8 --data_loader_config=dali --amp_mode=bf16 --enable_fused --enable_jit
+    '
+2024-11-18 17:03:47,911 - root - INFO - ------------------ Configuration ------------------
+2024-11-18 17:03:47,912 - root - INFO - Configuration file: /global/u2/t/train720/sc24-dl-tutorial/config/ViT.yaml
+2024-11-18 17:03:47,912 - root - INFO - Configuration name: short
+2024-11-18 17:03:47,912 - root - INFO - limit_nsamples 512
+2024-11-18 17:03:47,912 - root - INFO - limit_nsamples_val 128
+2024-11-18 17:03:47,912 - root - INFO - num_iters 128
+2024-11-18 17:03:47,912 - root - INFO - embed_dim 384
+2024-11-18 17:03:47,912 - root - INFO - depth 12
+2024-11-18 17:03:47,912 - root - INFO - dropout 0.0
+2024-11-18 17:03:47,912 - root - INFO - patch_size 8
+2024-11-18 17:03:47,912 - root - INFO - num_heads 8
+2024-11-18 17:03:47,912 - root - INFO - img_size [360, 720]
+2024-11-18 17:03:47,912 - root - INFO - dt 1
+2024-11-18 17:03:47,913 - root - INFO - global_batch_size 16
+2024-11-18 17:03:47,913 - root - INFO - amp_mode bf16
+2024-11-18 17:03:47,913 - root - INFO - enable_fused True
+2024-11-18 17:03:47,913 - root - INFO - enable_jit True
+2024-11-18 17:03:47,913 - root - INFO - expdir /logs
+2024-11-18 17:03:47,913 - root - INFO - lr_schedule cosine
+2024-11-18 17:03:47,913 - root - INFO - lr 0.0005
+2024-11-18 17:03:47,913 - root - INFO - warmup 0
+2024-11-18 17:03:47,913 - root - INFO - optimizer Adam
+2024-11-18 17:03:47,913 - root - INFO - data_loader_config dali
+2024-11-18 17:03:47,913 - root - INFO - num_data_workers 8
+2024-11-18 17:03:47,913 - root - INFO - n_in_channels 20
+2024-11-18 17:03:47,913 - root - INFO - n_out_channels 20
+2024-11-18 17:03:47,913 - root - INFO - train_data_path /data/train
+2024-11-18 17:03:47,913 - root - INFO - valid_data_path /data/valid
+2024-11-18 17:03:47,913 - root - INFO - inf_data_path /data/test
+2024-11-18 17:03:47,913 - root - INFO - time_means_path /data/stats/time_means.npy
+2024-11-18 17:03:47,913 - root - INFO - global_means_path /data/stats/global_means.npy
+2024-11-18 17:03:47,913 - root - INFO - global_stds_path /data/stats/global_stds.npy
+2024-11-18 17:03:47,914 - root - INFO - wireup_info env
+2024-11-18 17:03:47,914 - root - INFO - wireup_store tcp
+2024-11-18 17:03:47,914 - root - INFO - amp_enabled True
+2024-11-18 17:03:47,914 - root - INFO - amp_dtype torch.bfloat16
+2024-11-18 17:03:47,914 - root - INFO - ---------------------------------------------------
+2024-11-18 17:03:48,046 - root - INFO - rank 0, begin data loader init
+2024-11-18 17:03:48,662 - root - INFO - Getting file stats from /data/train/1990.h5
+2024-11-18 17:03:48,662 - root - INFO - Overriding total number of samples to: 512
+2024-11-18 17:03:48,663 - root - INFO - Number of samples per year: 1460
+2024-11-18 17:03:48,663 - root - INFO - Found data at path /data/train. Number of examples: 512. Image Shape: 360 x 720 x 20
+2024-11-18 17:03:48,949 - root - INFO - Getting file stats from /data/train/1990.h5
+2024-11-18 17:03:48,949 - root - INFO - Overriding total number of samples to: 512
+2024-11-18 17:04:07,365 - root - INFO - Getting file stats from /data/valid/2016.h5
+2024-11-18 17:04:07,367 - root - INFO - Overriding total number of samples to: 128
+2024-11-18 17:04:07,367 - root - INFO - Number of samples per year: 1460
+2024-11-18 17:04:07,367 - root - INFO - Found data at path /data/valid. Number of examples: 128. Image Shape: 360 x 720 x 20
+2024-11-18 17:04:07,541 - root - INFO - Getting file stats from /data/valid/2016.h5
+2024-11-18 17:04:07,542 - root - INFO - Overriding total number of samples to: 128
+2024-11-18 17:04:25,585 - root - INFO - rank 0, data loader initialized
+2024-11-18 17:04:27,630 - root - INFO - OptimizedModule(
+  (_orig_mod): VisionTransformer(
+    (patch_embed): PatchEmbed(
+      (proj): Conv2d(20, 384, kernel_size=(8, 8), stride=(8, 8))
+    )
+    (pos_drop): Dropout(p=0.0, inplace=False)
+    (blocks): ModuleList(
+      (0-11): 12 x Block(
+        (drop_path): Identity()
+        (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+        (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+        (attn): Attention(
+          (q): Linear(in_features=384, out_features=384, bias=True)
+          (k): Linear(in_features=384, out_features=384, bias=True)
+          (v): Linear(in_features=384, out_features=384, bias=True)
+          (attn_drop): Dropout(p=0.0, inplace=False)
+          (proj): Linear(in_features=384, out_features=384, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+        )
+        (mlp): MLP(
+          (fc1): Linear(in_features=384, out_features=1536, bias=True)
+          (act): GELU(approximate='none')
+          (fc2): Linear(in_features=1536, out_features=384, bias=True)
+          (drop): Dropout(p=0.0, inplace=False)
+        )
+      )
+    )
+    (norm): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+    (head): Linear(in_features=384, out_features=1280, bias=False)
+  )
+)
+2024-11-18 17:04:27,631 - root - INFO - Starting Training Loop...
+2024-11-18 17:04:28,720 - root - INFO - running build_ext
+2024-11-18 17:04:31,937 - root - INFO - running build_ext
+2024-11-18 17:04:31,953 - root - INFO - running build_ext
+2024-11-18 17:04:31,953 - root - INFO - running build_ext
+2024-11-18 17:04:32,345 - root - INFO - running build_ext
+2024-11-18 17:04:32,346 - root - INFO - running build_ext
+2024-11-18 17:04:32,347 - root - INFO - running build_ext
+2024-11-18 17:04:37,970 - root - INFO - running build_ext
+2024-11-18 17:04:37,995 - root - INFO - running build_ext
+2024-11-18 17:04:38,017 - root - INFO - running build_ext
+2024-11-18 17:05:00,491 - root - INFO - running build_ext
+2024-11-18 17:05:04,828 - root - INFO - running build_ext
+2024-11-18 17:05:25,324 - root - INFO - running build_ext
+2024-11-18 17:05:29,237 - root - INFO - running build_ext
+2024-11-18 17:05:56,777 - root - INFO - Time taken for epoch 1 is 59.339482 sec, avg 8.358684 samples/sec
+2024-11-18 17:05:56,778 - root - INFO -   Avg train loss=0.585331
+2024-11-18 17:06:12,993 - root - INFO -   Avg val loss=0.42270007729530334
+2024-11-18 17:06:12,993 - root - INFO -   Total validation time: 15.658532619476318 sec
+2024-11-18 17:06:21,947 - root - INFO - Time taken for epoch 2 is 8.943467 sec, avg 57.248494 samples/sec
+2024-11-18 17:06:21,948 - root - INFO -   Avg train loss=0.392722
+2024-11-18 17:06:23,627 - root - INFO -   Avg val loss=0.37698930501937866
+2024-11-18 17:06:23,627 - root - INFO -   Total validation time: 1.168950080871582 sec
+2024-11-18 17:06:32,584 - root - INFO - Time taken for epoch 3 is 8.948824 sec, avg 57.214222 samples/sec
+2024-11-18 17:06:32,585 - root - INFO -   Avg train loss=0.358859
+2024-11-18 17:06:34,560 - root - INFO -   Avg val loss=0.35579824447631836
+2024-11-18 17:06:34,561 - root - INFO -   Total validation time: 1.4672081470489502 sec
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/tmp/nsys-report-b983.qdstrm'
+[1/1] [0%                          ] JITCompilation.nsys-rep[1/1] [0%                          ] JITCompilation.nsys-rep[1/1] [0%                          ] JITCompilation.nsys-rep[1/1] [5%                          ] JITCompilation.nsys-rep[1/1] [=16%                        ] JITCompilation.nsys-rep[1/1] [====28%                     ] JITCompilation.nsys-rep[1/1] [========41%                 ] JITCompilation.nsys-rep[1/1] [===========53%              ] JITCompilation.nsys-rep[1/1] [===============66%          ] JITCompilation.nsys-rep[1/1] [================70%         ] JITCompilation.nsys-rep[1/1] [================71%         ] JITCompilation.nsys-rep[1/1] [=================73%        ] JITCompilation.nsys-rep[1/1] [==================76%       ] JITCompilation.nsys-rep[1/1] [==================78%       ] JITCompilation.nsys-rep[1/1] [===================80%      ] JITCompilation.nsys-rep[1/1] [===================82%      ] JITCompilation.nsys-rep[1/1] [========================100%] JITCompilation.nsys-rep[1/1] [========================100%] JITCompilation.nsys-rep
+Generated:
+    /pscratch/sd/t/train720/sc24-dl-tutorial/logs/JITCompilation.nsys-rep
